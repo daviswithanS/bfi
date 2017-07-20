@@ -43,5 +43,4 @@ private:
 	std::vector<unsigned char>::size_type size;
 };
 
-
 #endif

@@ -19,7 +19,6 @@ using std::out_of_range;
 using std::string;
 using std::vector;
 
-
 Interpreter::Interpreter(const string& filename)
 {
 	load_instructions(filename); 
@@ -105,7 +104,6 @@ void Interpreter::jumpb()
 	}
 }
 
-
 // Initialize with 25 cells by default, but allow the caller to change that.
 Pointer::Pointer(vector<unsigned char>::size_type n = 25): cells(n, 0), index(0), size(n) {} 
 
@@ -152,7 +150,6 @@ void Pointer::read()
 	}
 	cells[index] = c;
 }
-
 
 int main(int argc, char** argv)
 {
