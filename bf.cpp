@@ -45,15 +45,9 @@ void Interpreter::load_instructions(const string& filename)
 
 bool Interpreter::is_valid(const char c)
 {
-	static const char allowed[] = {
-		'>', '<', '+', '-', '.', ',', '[', ']'
-	};
-	static const size_t n = sizeof(allowed) / sizeof(*allowed);
-
-	for (size_t i = 0; i < n; ++i) {
-		if (c == allowed[i]) {
-			return true;
-		}
+	if (c == '>' || c == '<' || c == '+' || c == '-' ||
+	    c == '.' || c == ',' || c == '[' || c == ']') {
+		return true;
 	}
 	return false;
 }
