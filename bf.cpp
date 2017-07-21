@@ -1,8 +1,5 @@
 #include <fstream>
 #include <iostream>
-#include <stack>
-#include <stdexcept>
-#include <string>
 #include <vector>
 
 using std::ifstream;
@@ -10,9 +7,6 @@ using std::cerr;
 using std::cin;
 using std::cout;
 using std::endl;
-using std::stack;
-using std::out_of_range;
-using std::string;
 using std::vector;
 
 int main(int argc, char** argv)
@@ -28,7 +22,7 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	// represents the "address field" - a string of cells from 0 to
+	// represents the "address field" - a vector of cells from 0 to
 	// infinity, where each cell stores a number up to 255
 	vector<unsigned char> cells(25, 0);
 	vector<unsigned char>::size_type index = 0;
@@ -79,22 +73,22 @@ int main(int argc, char** argv)
 			// loop begin
 			case '[': 
 				if (cells[index] == 0) {
-					stack<char> brackets;
-					brackets.push('[');
-					// go until end is reached or all brackets are resolved (a pair is found)
+					// initially set to 1 to include the starting bracket
+					vector<unsigned char>::size_type brackets = 1;
+
+					// stops going forward at eof or when brackets is 0
 					while (file.get(command)) {
 						switch (command) {
-							case '[': brackets.push('['); break;
-							case ']': brackets.pop(); break;
+							case '[': ++brackets; break;
+							case ']': --brackets; break;
 						}
 
-						if (brackets.size() == 0) {
+						if (brackets == 0) {
 							break;
 						}
 					}
 
-					// throw error if any brackets are unresolved
-					if (brackets.size() > 0) {
+					if (brackets > 0) {
 						cerr << ("program had an unclosed '['") << endl;
 						return 1;
 					}
@@ -103,22 +97,25 @@ int main(int argc, char** argv)
 			// loop end
 			case ']':
 				if (cells[index] != 0) {
-					stack<char> brackets;
-					// see jumpf()
+					// initially set to 0 because unget() goes over the
+					// starting bracket again
+					vector<unsigned char>::size_type brackets = 0;
+
+					// stops going backward at beginning of file 
+					// (error returns false) or when brackets is 0
 					while (file.unget()) {
 						command = file.peek();
 						switch (command) {
-							case ']': brackets.push(']'); break;
-							case '[': brackets.pop(); break;
+							case ']': ++brackets; break;
+							case '[': --brackets; break;
 						}
 
-						if (brackets.size() == 0) {
+						if (brackets == 0) {
 							break;
 						}
 					}
 
-					// throw error if any brackets are unresolved
-					if (brackets.size() > 0) {
+					if (brackets > 0) {
 						cerr << "program had an unclosed ']'" << endl;
 						return 1;
 					}
