@@ -28,11 +28,9 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	vector<unsigned char>::size_type size = 10;
-
 	// represents the "address field" - a string of cells from 0 to
 	// infinity, where each cell stores a number up to 255
-	vector<unsigned char> cells(size, 0);
+	vector<unsigned char> cells(25, 0);
 	vector<unsigned char>::size_type index = 0;
 
 	char command;
@@ -46,7 +44,7 @@ int main(int argc, char** argv)
 				}
 				++index;
 				// add more cells if necessary
-				if (index >= size) {
+				if (index >= cells.size()) {
 					cells.push_back(0);
 				}
 				break;
