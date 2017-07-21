@@ -1,3 +1,4 @@
+// a brainfuck interpreter
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -24,7 +25,7 @@ int main(int argc, char** argv)
 
 	// represents the "address field" - a vector of cells from 0 to
 	// infinity, where each cell stores a number up to 255
-	vector<unsigned char> cells(25, 0);
+	vector<unsigned char> cells(3000, 0);
 	vector<unsigned char>::size_type index = 0;
 
 	char command;
