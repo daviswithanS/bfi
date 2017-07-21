@@ -46,7 +46,7 @@ void Interpreter::load_instructions(const string& filename)
 bool Interpreter::is_valid(const char c)
 {
 	if (c == '>' || c == '<' || c == '+' || c == '-' ||
-	    c == '.' || c == ',' || c == '[' || c == ']') {
+			c == '.' || c == ',' || c == '[' || c == ']') {
 		return true;
 	}
 	return false;
@@ -60,8 +60,8 @@ void Interpreter::jumpf()
 	while (iter != commands.end()) {
 		++iter;
 		switch (*iter) {
-		case '[': brackets.push('['); break;
-		case ']': brackets.pop(); break;
+			case '[': brackets.push('['); break;
+			case ']': brackets.pop(); break;
 		}
 
 		if (brackets.size() == 0) {
@@ -83,8 +83,8 @@ void Interpreter::jumpb()
 	while (iter != commands.begin()) {
 		--iter;
 		switch (*iter) {
-		case ']': brackets.push(']'); break;
-		case '[': brackets.pop(); break;
+			case ']': brackets.push(']'); break;
+			case '[': brackets.pop(); break;
 		}
 
 		if (brackets.size() == 0) {
@@ -98,53 +98,6 @@ void Interpreter::jumpb()
 	}
 }
 
-// Initialize with 25 cells by default, but allow the caller to change that.
-Pointer::Pointer(vector<unsigned char>::size_type n = 25): cells(n, 0), index(0), size(n) {} 
-
-void Pointer::right()
-{
-	if (index == cells.max_size()-1) {
-		throw out_of_range("program tried to access too large of a cell");
-	}
-	++index;
-	// add more cells if necessary
-	if (index >= size) {
-		cells.push_back(0);
-	}
-}
-
-void Pointer::left()
-{
-	if (index == 0) {
-		throw out_of_range("program tried to access cell -1");
-	}
-	--index;
-}
-
-void Pointer::increment()
-{
-	++cells[index];
-}
-
-void Pointer::decrement()
-{
-	--cells[index];
-}
-
-void Pointer::write()
-{
-	cout << cells[index];
-}
-
-void Pointer::read()
-{
-	char c;
-	if (!cin.get(c)) {
-		c = 0;
-	}
-	cells[index] = c;
-}
-
 int main(int argc, char** argv)
 {
 	if (argc == 1) {
@@ -153,30 +106,69 @@ int main(int argc, char** argv)
 	}
 
 	Interpreter in(argv[1]);
-	Pointer p(10);
-	
+
+	vector<unsigned char>::size_type size = 10;
+
+	// represents the "address field" - a string of cells from 0 to
+	// infinity, where each cell stores a number up to 255
+	vector<unsigned char> cells(size, 0);
+	vector<unsigned char>::size_type index = 0;
+
 	while (in.current() != '\0') {
 		char command = in.current();
 
 		switch (command) {
-		case '>': p.right(); break;
-		case '<': p.left(); break;
-		case '+': p.increment(); break;
-		case '-': p.decrement(); break;
-		case '.': p.write(); break;
-		case ',': p.read(); break;
-		case '[': 
-			if (p.current() == 0) {
-				in.jumpf();
-			}
-			break;
-		case ']':
-			if (p.current() != 0) {
-				in.jumpb();
-			}
-			break;
+			// move right
+			case '>': 
+				if (index == cells.max_size()-1) {
+					throw out_of_range("program tried to access too large of a cell");
+				}
+				++index;
+				// add more cells if necessary
+				if (index >= size) {
+					cells.push_back(0);
+				}
+				break;
+			// move left
+			case '<': 
+				if (index == 0) {
+					throw out_of_range("program tried to access cell -1");
+				}
+				--index;
+				break;
+			// increment
+			case '+': 
+				++cells[index];
+				break;
+			// decrement
+			case '-': 
+				--cells[index];
+				break;
+			// write
+			case '.': 
+				cout << cells[index];
+				break;
+			// read
+			case ',': 
+				char c;
+				if (!cin.get(c)) {
+					c = 0;
+				}
+				cells[index] = c;
+				break;
+			// loop begin
+			case '[': 
+				if (cells[index] == 0) {
+					in.jumpf();
+				}
+				break;
+			// loop end
+			case ']':
+				if (cells[index] != 0) {
+					in.jumpb();
+				}
+				break;
 		}
-
 		in.next();
 	}
 
