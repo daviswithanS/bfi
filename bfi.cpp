@@ -37,8 +37,8 @@ Instructions::Instructions(char* filename)
 
 bool Instructions::is_valid(char c)
 {
-	return c == '>' || c == '<' || c == '+' || c == '-'
-		|| c == '.' || c == ',' || c == '[' || c == ']';
+	return	c == '>' || c == '<' || c == '+' || c == '-' ||
+		c == '.' || c == ',' || c == '[' || c == ']';
 }
 
 void Instructions::jumpf()
@@ -132,14 +132,14 @@ int main(int argc, char** argv)
 
 		while (!in.eof()) {
 			switch (in.current()) {
-				case '>': cs.move_right(); break;
-				case '<': cs.move_left(); break;
-				case '+': cs.increment(); break;
-				case '-': cs.decrement(); break;
-				case '.': cs.write(); break;
-				case ',': cs.read(); break;
-				case '[': if (cs.value() == 0) { in.jumpf(); }; break;
-				case ']': if (cs.value() != 0) { in.jumpb(); }; break;
+			case '>': cs.move_right(); break;
+			case '<': cs.move_left(); break;
+			case '+': cs.increment(); break;
+			case '-': cs.decrement(); break;
+			case '.': cs.write(); break;
+			case ',': cs.read(); break;
+			case '[': if (cs.value() == 0) { in.jumpf(); }; break;
+			case ']': if (cs.value() != 0) { in.jumpb(); }; break;
 			}
 			in.next();
 		}
