@@ -1,5 +1,5 @@
-#ifndef GUARD_bfi_h
-#define GUARD_bfi_h
+#ifndef GUARD_bfi_hpp
+#define GUARD_bfi_hpp
 
 #include <vector>
 

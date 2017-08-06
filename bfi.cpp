@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <vector>
-#include "bfi.h"
+#include "bfi.hpp"
 
 using std::ifstream;
 using std::cerr;
