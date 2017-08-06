@@ -5,7 +5,7 @@
 
 class Instructions {
 public:
-	Instructions(char*);
+	explicit Instructions(char*);
 
 	char current() const { return *iter; }
 	bool eof() const { return iter == instructions.end(); }
@@ -22,7 +22,7 @@ private:
 
 class CellSpace {
 public:
-	CellSpace(std::vector<unsigned char>::size_type);
+	explicit CellSpace(std::vector<unsigned char>::size_type);
 
 	unsigned char value() const { return cells[index]; }
 
