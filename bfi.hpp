@@ -30,7 +30,7 @@ public:
 	void move_left();
 	void increment() { ++cells[index]; }
 	void decrement() { --cells[index]; }
-	void write();
+	void write() const;
 	void read();
 private:
 	// represents the "address field" - a vector of cells from 0 to

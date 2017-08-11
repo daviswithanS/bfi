@@ -105,7 +105,7 @@ void CellSpace::move_left()
 	--index;
 }
 
-void CellSpace::write()
+void CellSpace::write() const
 {
 	cout << cells[index];
 }
